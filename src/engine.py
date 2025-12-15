@@ -61,7 +61,7 @@ def train_step(
     train_loss /= num_batches
     train_accuracy /= num_batches
 
-    return train_loss, train_accuracy
+    return train_loss.item(), train_accuracy.item()
 
 
 def test_step(
@@ -107,7 +107,7 @@ def test_step(
         test_loss /= num_batches
         test_accuracy /= num_batches
 
-    return test_loss, test_accuracy
+    return test_loss.item(), test_accuracy.item()
 
 
 def train(

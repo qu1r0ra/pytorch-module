@@ -53,14 +53,12 @@ def create_dataloaders(
         batch_size=batch_size,
         shuffle=True,
         num_workers=num_workers,
-        pin_memory=True,
     )
     test_dataloader = DataLoader(
         dataset=test_data,
         batch_size=batch_size * 2,
         shuffle=False,
         num_workers=num_workers,
-        pin_memory=True,
     )
 
     return train_dataloader, test_dataloader, classes

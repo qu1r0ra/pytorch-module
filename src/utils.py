@@ -35,19 +35,19 @@ def save_model(model: torch.nn.Module, target_dir: Path, model_name: str):
 def plot_train_test_curves(results: dict[str, list[float]]):
     plt.figure(figsize=(15, 10))
 
-    epochs = range(len(results))
+    epochs = range(len(results["train_loss"]))
 
     plt.subplot(1, 2, 1)
-    plt.plot(epochs, results["train_loss"], "Train Loss")
-    plt.plot(epochs, results["test_loss"], "Test Loss")
+    plt.plot(epochs, results["train_loss"], label="Train Loss")
+    plt.plot(epochs, results["test_loss"], label="Test Loss")
     plt.title("Train Loss vs. Test Loss")
-    plt.xlabel("Epoch")
+    plt.xlabel("Epochs")
     plt.ylabel("Loss")
     plt.legend()
 
     plt.subplot(1, 2, 2)
-    plt.plot(epochs, results["train_accuracy"], "Train Accuracy")
-    plt.plot(epochs, results["test_accuracy"], "Test Accuracy")
+    plt.plot(epochs, results["train_accuracy"], label="Train Accuracy")
+    plt.plot(epochs, results["test_accuracy"], label="Test Accuracy")
     plt.title("Train Accuracy vs. Test Accuracy")
     plt.xlabel("Epoch")
     plt.ylabel("Accuracy")
