@@ -2,6 +2,7 @@
 Trains a PyTorch image classification model using device-agnostic code.
 """
 
+import argparse
 import os
 
 import torch
@@ -15,18 +16,49 @@ from src.engine import train
 from src.model_builder import TinyVGG
 from src.utils import plot_train_test_curves, save_model
 
-BATCH_SIZE = 32
-EPOCHS = 5
-HIDDEN_UNITS = 10
+
+def get_args():
+    parser = argparse.ArgumentParser(description="Train the TinyVGG model.")
+
+    parser.add_argument(
+        "--batch-size", type=int, default=32, help="Batch size for training"
+    )
+    parser.add_argument(
+        "--epochs", type=int, default=5, help="Number of epochs to train"
+    )
+    parser.add_argument(
+        "--hidden-units",
+        type=int,
+        default=10,
+        help="Number of hidden units in the model",
+    )
+    parser.add_argument(
+        "--learning-rate",
+        type=float,
+        default=0.001,
+        help="Learning rate for the optimizer",
+    )
+
+    return parser.parse_args()
+
+
+args = get_args()
+
+BATCH_SIZE = args.batch_size
+EPOCHS = args.epochs
+HIDDEN_UNITS = args.hidden_units
 IMAGE_LENGTH = 64
-LEARNING_RATE = 0.001
+LEARNING_RATE = args.learning_rate
 NUM_WORKERS = os.cpu_count()
 
 assert isinstance(NUM_WORKERS, int), "NUM_WORKERS must be an int."
 
 device = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu")
 data_transform = v2.Compose(
-    [v2.Resize(size=(IMAGE_LENGTH, IMAGE_LENGTH)), v2.ToTensor()]
+    [
+        v2.Resize(size=(IMAGE_LENGTH, IMAGE_LENGTH)),
+        v2.Compose([v2.ToImage(), v2.ToDtype(torch.float32, scale=True)]),
+    ]
 )
 
 # Get dataloaders
